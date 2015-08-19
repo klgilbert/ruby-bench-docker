@@ -1,0 +1,38 @@
+# !/bin/bash
+set -e
+
+echo "Using JRuby $JRUBY_VERSION"
+rbenv global $JRUBY_VERSION
+
+echo "Checking JRUBY_VERSION in environment"
+echo "JRUBY_VERSION=$JRUBY_VERSION"
+
+cd /ruby-bench-suite
+git fetch origin
+git rebase origin/master
+
+cd /
+
+if [ "$INCLUDE_PATTERNS" ]; then
+  PATTERNS="--pattern $INCLUDE_PATTERNS"
+fi
+
+if [ "$JRUBY_BENCHMARKS" = true ]; then
+  echo "Running benchmarks with JRuby $JRUBY_VERSION"
+  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m -J-server /ruby-bench-suite/jruby/benchmarks/driver.rb \
+    --executables jruby \
+    --repeat-count 2 \
+    $PATTERNS
+else
+  echo "Skipping JRuby benchmarks"
+fi
+
+if [ "$JRUBY_MEMORY_BENCHMARKS" = true ]; then
+  echo "Running memory benchmarks with JRuby $JRUBY_VERSION"
+  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m -J-server /ruby-bench-suite/jruby/benchmarks/memory_driver.rb \
+    --executables ruby \
+    --repeat-count 2 \
+    $PATTERNS
+else
+  echo "Skipping JRuby memory benchmarks"
+fi
