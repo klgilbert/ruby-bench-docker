@@ -19,7 +19,7 @@ fi
 
 if [ "$JRUBY_BENCHMARKS" = true ]; then
   echo "Running benchmarks with JRuby $JRUBY_VERSION"
-  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m -J-server /ruby-bench-suite/jruby/benchmarks/driver.rb \
+  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m /ruby-bench-suite/jruby/benchmarks/driver.rb \
     --executables jruby \
     --repeat-count 2 \
     $PATTERNS
@@ -29,7 +29,7 @@ fi
 
 if [ "$JRUBY_MEMORY_BENCHMARKS" = true ]; then
   echo "Running memory benchmarks with JRuby $JRUBY_VERSION"
-  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m -J-server /ruby-bench-suite/jruby/benchmarks/memory_driver.rb \
+  jruby -J-Xmn512m -J-Xms2048m -J-Xmx2048m /ruby-bench-suite/jruby/benchmarks/memory_driver.rb \
     --executables ruby \
     --repeat-count 2 \
     $PATTERNS
